@@ -1,10 +1,11 @@
-﻿using System;
-using System.Windows;
+﻿using hrm.Services;
+using hrm.ViewModels;
+using hrm.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using hrm.Services;
-using hrm.ViewModels;
 using Npgsql;
+using System;
+using System.Windows;
 
 
 namespace hrm
@@ -14,7 +15,7 @@ namespace hrm
         public IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
@@ -29,25 +30,37 @@ namespace hrm
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
+            await TestDatabaseConnection();
+
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
-        }
 
+        }
+        private async Task TestDatabaseConnection()
+        {
+            try
+            {
+                using var connection = new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection"));
+                await connection.OpenAsync();
+                MessageBox.Show("Database connection successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database connection failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         private void ConfigureServices(IServiceCollection services)
         {
             // Database connection
-            services.AddScoped(_ => new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddScoped<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
 
             // Services
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
-            // Add other services as needed
 
             // ViewModels
-            services.AddSingleton<MainViewModel>();
-            services.AddTransient<DepartmentViewModel>();
-            services.AddTransient<EmployeeViewModel>();
-            // Add other ViewModels
+            services.AddTransient<TableManagerViewModel>();
 
             // Views
             services.AddSingleton<MainWindow>();

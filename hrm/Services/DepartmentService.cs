@@ -1,8 +1,9 @@
 ﻿using Dapper;
 using hrm.Models;
+using hrm.Services;
 using Npgsql;
 
-namespace HRManagementApp.Services
+namespace hrm.Services
 {
     public class DepartmentService : IDepartmentService
     {
@@ -16,8 +17,6 @@ namespace HRManagementApp.Services
         public async Task<IEnumerable<Department>> GetAllDepartmentsAsync()
         {
             using var connection = new NpgsqlConnection(_connectionString);
-            await connection.OpenAsync();
-
             return await connection.QueryAsync<Department>("SELECT * FROM Departments");
         }
 

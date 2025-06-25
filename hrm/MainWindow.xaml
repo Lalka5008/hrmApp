@@ -1,0 +1,43 @@
+﻿<Window x:Class="hrm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HRM Table Manager" Height="600" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Панель навигации -->
+        <StackPanel Grid.Column="0" Background="#EEE">
+            <Button Content="Сотрудники" 
+                    Command="{Binding LoadTableCommand}" 
+                    CommandParameter="employees"
+                    Margin="5"/>
+            <Button Content="Отделы" 
+                    Command="{Binding LoadTableCommand}" 
+                    CommandParameter="departments"
+                    Margin="5"/>
+            <Button Content="Должности" 
+                    Command="{Binding LoadTableCommand}" 
+                    CommandParameter="positions"
+                    Margin="5"/>
+            <!-- Добавьте другие таблицы -->
+        </StackPanel>
+
+        <!-- Основное содержимое -->
+        <DockPanel Grid.Column="1">
+            <ToolBar DockPanel.Dock="Top">
+                <Button Content="Обновить" Command="{Binding RefreshCommand}"/>
+                <Button Content="Добавить" Command="{Binding AddCommand}"/>
+                <Button Content="Удалить" Command="{Binding DeleteCommand}"/>
+                <Button Content="Сохранить" Command="{Binding SaveCommand}"/>
+            </ToolBar>
+
+            <DataGrid ItemsSource="{Binding CurrentTable}"
+                      SelectedItem="{Binding SelectedRow}"
+                      AutoGenerateColumns="True"
+                      CanUserAddRows="False"/>
+        </DockPanel>
+    </Grid>
+</Window>   

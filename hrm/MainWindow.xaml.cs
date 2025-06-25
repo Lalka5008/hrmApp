@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using hrm.ViewModels;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +22,10 @@ namespace hrm
         public MainWindow()
         {
             InitializeComponent();
+
+            // Получаем TableManagerViewModel через DI
+            var connectionString = (Application.Current as App)?.Configuration.GetConnectionString("DefaultConnection");
+            DataContext = new TableManagerViewModel(connectionString);
         }
     }
 }

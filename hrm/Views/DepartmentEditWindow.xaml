@@ -1,0 +1,27 @@
+<Window x:Class="hrm.Views.DepartmentEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактирование отдела" Height="250" Width="400"
+        WindowStartupLocation="CenterOwner">
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<Label Content="Название:"/>
+		<TextBox Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+		<Label Grid.Row="2" Content="Местоположение:"/>
+		<TextBox Grid.Row="3" Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+		<StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+			<Button Content="Сохранить" Width="80" Margin="0,0,10,0"
+                    IsDefault="True" Click="SaveButton_Click"/>
+			<Button Content="Отмена" Width="80" IsCancel="True"/>
+		</StackPanel>
+	</Grid>
+</Window>

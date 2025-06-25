@@ -18,12 +18,8 @@ namespace hrm.Models
         public DateTime HireDate { get; set; }
         public string Status { get; set; }
 
-        public Department Department { get; set; }
-        public Position Position { get; set; }
-
-        // Navigation properties
-        public ICollection<WorkSchedule> WorkSchedules { get; set; }
-        public ICollection<TimeTracking> TimeTrackings { get; set; }
-        // ... Add other navigation properties for related entities
+        // Названия вместо объектов (для простоты)
+        public string DepartmentName { get; set; }
+        public string PositionTitle { get; set; }
     }
 }

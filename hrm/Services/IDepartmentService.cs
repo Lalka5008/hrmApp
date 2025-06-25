@@ -1,4 +1,7 @@
-﻿using hrm.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using hrm.Models;
+
 namespace hrm.Services
 {
     public interface IDepartmentService
