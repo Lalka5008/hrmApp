@@ -84,9 +84,16 @@ namespace hrm.ViewModels
 
         private void AddRecord()
         {
-            var newRow = CurrentTable.NewRow();
-            CurrentTable.Rows.Add(newRow);
-            SelectedRow = (DataRowView)CurrentTable.DefaultView[CurrentTable.Rows.Count - 1];
+            try
+            {
+                var newRow = CurrentTable.NewRow();
+                CurrentTable.Rows.Add(newRow);
+                SelectedRow = (DataRowView)CurrentTable.DefaultView[CurrentTable.Rows.Count - 1];
+            }
+            catch 
+            {
+                MessageBox.Show($"Выберите таблицу");
+            }
         }
 
         private void EditRecord()
