@@ -70,7 +70,20 @@ namespace hrm.Services
 
             await connection.ExecuteAsync(sql, employee);
         }
+     
+        public async Task AddEmployeesAsync(IEnumerable<Employee> employees)
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
 
+            var sql = @"INSERT INTO Employees 
+              (first_name, last_name, birth_date, gender, 
+               department_id, position_id, hire_date, status) 
+              VALUES (@FirstName, @LastName, @BirthDate, @Gender, 
+                     @DepartmentId, @PositionId, @HireDate, @Status)";
+
+            await connection.ExecuteAsync(sql, employees);
+        }
         public async Task DeleteEmployeeAsync(int id)
         {
             using var connection = new NpgsqlConnection(_connectionString);

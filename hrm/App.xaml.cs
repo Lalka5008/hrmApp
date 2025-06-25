@@ -49,20 +49,23 @@ namespace hrm
                 MessageBox.Show($"Database connection failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void ConfigureServices(IServiceCollection services)
         {
-            // Database connection
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddScoped<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
 
-            // Services
+            // Регистрация сервисов
+            services.AddScoped<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
+            services.AddScoped<IJsonService, JsonService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
 
-            // ViewModels
-            services.AddTransient<TableManagerViewModel>();
+            // Регистрация ViewModel с явным указанием параметров
+            services.AddTransient<TableManagerViewModel>(provider =>
+                new TableManagerViewModel(
+                    connectionString,
+                    provider.GetRequiredService<IJsonService>()));
 
-            // Views
             services.AddSingleton<MainWindow>();
         }
     }

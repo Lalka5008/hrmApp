@@ -8,6 +8,7 @@ namespace hrm.ViewModels
         private object _currentViewModel;
         private readonly IDepartmentService _departmentService;
         private readonly IEmployeeService _employeeService;
+        private readonly IJsonService _jsonService;
 
         public object CurrentViewModel
         {
@@ -22,10 +23,14 @@ namespace hrm.ViewModels
         public ICommand ShowDepartmentsCommand { get; }
         public ICommand ShowEmployeesCommand { get; }
 
-        public MainViewModel(IDepartmentService departmentService, IEmployeeService employeeService)
+        public MainViewModel(
+            IDepartmentService departmentService,
+            IEmployeeService employeeService,
+            IJsonService jsonService)
         {
             _departmentService = departmentService;
             _employeeService = employeeService;
+            _jsonService = jsonService;
 
             ShowDepartmentsCommand = new RelayCommand(ShowDepartments);
             ShowEmployeesCommand = new RelayCommand(ShowEmployees);
@@ -38,7 +43,7 @@ namespace hrm.ViewModels
 
         private void ShowEmployees()
         {
-            CurrentViewModel = new EmployeeViewModel(_employeeService);
+            CurrentViewModel = new EmployeeViewModel(_employeeService, _jsonService);
         }
     }
 }

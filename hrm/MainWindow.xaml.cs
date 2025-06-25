@@ -19,13 +19,10 @@ namespace hrm
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(TableManagerViewModel viewModel)
         {
             InitializeComponent();
-
-            // Получаем TableManagerViewModel через DI
-            var connectionString = (Application.Current as App)?.Configuration.GetConnectionString("DefaultConnection");
-            DataContext = new TableManagerViewModel(connectionString);
+            DataContext = viewModel;
         }
     }
 }

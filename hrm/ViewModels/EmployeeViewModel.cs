@@ -1,7 +1,9 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿// EmployeeViewModel.cs
+using CommunityToolkit.Mvvm.Input;
 using hrm.Models;
 using hrm.Services;
 using hrm.Views;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -11,6 +13,7 @@ namespace hrm.ViewModels
     public class EmployeeViewModel : ViewModelBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IJsonService _jsonService;
         private ObservableCollection<Employee> _employees;
         private Employee _selectedEmployee;
 
@@ -30,15 +33,20 @@ namespace hrm.ViewModels
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
+        public ICommand ExportToJsonCommand { get; }
+        public ICommand ImportFromJsonCommand { get; }
 
-        public EmployeeViewModel(IEmployeeService employeeService)
+        public EmployeeViewModel(IEmployeeService employeeService, IJsonService jsonService)
         {
             _employeeService = employeeService;
+            _jsonService = jsonService;
 
             AddCommand = new RelayCommand(AddEmployee);
             EditCommand = new RelayCommand(EditEmployee, CanEditDelete);
             DeleteCommand = new RelayCommand(DeleteEmployee, CanEditDelete);
             RefreshCommand = new RelayCommand(LoadEmployees);
+            ExportToJsonCommand = new RelayCommand(ExportToJson);
+            ImportFromJsonCommand = new RelayCommand(ImportFromJson);
 
             LoadEmployees();
         }
@@ -125,6 +133,66 @@ namespace hrm.ViewModels
             dialog.Owner = Application.Current.MainWindow;
 
             return dialog.ShowDialog() == true;
+        }
+        private async void ExportToJson()
+        {
+            try
+            {
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                    DefaultExt = "json",
+                    FileName = "employees_export.json"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    await _jsonService.ExportEmployeesToJsonAsync(Employees, saveFileDialog.FileName);
+                    MessageBox.Show("Данные успешно экспортированы в JSON", "Экспорт завершен",
+                                   MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при экспорте в JSON: {ex.Message}", "Ошибка",
+                               MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void ImportFromJson()
+        {
+            try
+            {
+                var openFileDialog = new OpenFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                    DefaultExt = "json"
+                };
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    var importedEmployees = await _jsonService.ImportEmployeesFromJsonAsync(openFileDialog.FileName);
+
+                    if (MessageBox.Show($"Найдено {importedEmployees.Count()} сотрудников. Импортировать?",
+                                       "Подтверждение импорта",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        foreach (var employee in importedEmployees)
+                        {
+                            await _employeeService.AddEmployeeAsync(employee);
+                        }
+
+                        LoadEmployees();
+                        MessageBox.Show("Данные успешно импортированы", "Импорт завершен",
+                                      MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при импорте из JSON: {ex.Message}", "Ошибка",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

@@ -22,7 +22,6 @@
                     Command="{Binding LoadTableCommand}" 
                     CommandParameter="positions"
                     Margin="5"/>
-            <!-- Добавьте другие таблицы -->
         </StackPanel>
 
         <!-- Основное содержимое -->
@@ -32,6 +31,9 @@
                 <Button Content="Добавить" Command="{Binding AddCommand}"/>
                 <Button Content="Удалить" Command="{Binding DeleteCommand}"/>
                 <Button Content="Сохранить" Command="{Binding SaveCommand}"/>
+                <Separator/>
+                <Button Content="Экспорт в JSON" Command="{Binding ExportToJsonCommand}"/>
+                <Button Content="Импорт из JSON" Command="{Binding ImportFromJsonCommand}"/>
             </ToolBar>
 
             <DataGrid ItemsSource="{Binding CurrentTable}"
@@ -40,4 +42,4 @@
                       CanUserAddRows="False"/>
         </DockPanel>
     </Grid>
-</Window>   
+</Window>
