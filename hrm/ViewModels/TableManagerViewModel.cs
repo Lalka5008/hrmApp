@@ -24,8 +24,18 @@ namespace hrm.ViewModels
         public DataRowView SelectedRow
         {
             get => _selectedRow;
-            set { _selectedRow = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedRow = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsRowSelected));
+                // Обновляем состояние команд
+                ((RelayCommand)EditCommand).NotifyCanExecuteChanged();
+                ((RelayCommand)DeleteCommand).NotifyCanExecuteChanged();
+            }
         }
+
+        public bool IsRowSelected => SelectedRow != null;
 
         public ICommand LoadTableCommand { get; }
         public ICommand RefreshCommand { get; }
@@ -41,8 +51,8 @@ namespace hrm.ViewModels
             LoadTableCommand = new RelayCommand<string>(LoadTable);
             RefreshCommand = new RelayCommand(RefreshData);
             AddCommand = new RelayCommand(AddRecord);
-            EditCommand = new RelayCommand(EditRecord, () => SelectedRow != null);
-            DeleteCommand = new RelayCommand(DeleteRecord, () => SelectedRow != null);
+            EditCommand = new RelayCommand(EditRecord, () => IsRowSelected);
+            DeleteCommand = new RelayCommand(DeleteRecord, () => IsRowSelected);
             SaveCommand = new RelayCommand(SaveChanges);
         }
 
@@ -50,6 +60,7 @@ namespace hrm.ViewModels
         {
             _currentTableName = tableName;
             RefreshData();
+            LogTableStructure(); // Добавьте эту строку для отладки
         }
 
         private void RefreshData()
@@ -80,35 +91,154 @@ namespace hrm.ViewModels
 
         private void EditRecord()
         {
-            // Реализация редактирования
-            MessageBox.Show("Редактирование записи");
+            if (SelectedRow == null) return;
+            MessageBox.Show($"Редактирование записи с ID: {GetIdValue()}");
         }
 
         private void DeleteRecord()
         {
+            if (SelectedRow == null)
+            {
+                MessageBox.Show("Выберите запись для удаления");
+                return;
+            }
+
             try
             {
+                // Получаем первичный ключ для текущей таблицы
                 var primaryKey = GetPrimaryKeyColumn(_currentTableName);
-                var id = SelectedRow[primaryKey];
+                if (string.IsNullOrEmpty(primaryKey))
+                {
+                    MessageBox.Show("Не удалось определить первичный ключ таблицы");
+                    return;
+                }
 
+                // Получаем значение первичного ключа
+                var primaryKeyValue = SelectedRow[primaryKey];
+                if (primaryKeyValue == null || primaryKeyValue == DBNull.Value)
+                {
+                    MessageBox.Show("Не удалось получить значение первичного ключа");
+                    return;
+                }
+
+                // Запрос подтверждения
+                var result = MessageBox.Show(
+                    $"Вы уверены, что хотите удалить эту запись? (PK: {primaryKey}={primaryKeyValue})",
+                    "Подтверждение удаления",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result != MessageBoxResult.Yes) return;
+
+                // Выполняем удаление
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     connection.Open();
                     using (var cmd = new NpgsqlCommand(
-                        $"DELETE FROM {_currentTableName} WHERE {primaryKey} = @id", connection))
+                        $"DELETE FROM {_currentTableName} WHERE {primaryKey} = @pKey", connection))
                     {
-                        cmd.Parameters.AddWithValue("id", id);
-                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.AddWithValue("pKey", primaryKeyValue);
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Запись успешно удалена");
+                            RefreshData();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Не удалось удалить запись. Возможно, она уже была удалена.");
+                        }
                     }
                 }
-                RefreshData();
+            }
+            catch (Npgsql.PostgresException ex) when (ex.SqlState == "23503")
+            {
+                MessageBox.Show("Нельзя удалить запись, так как на неё есть ссылки в других таблицах");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка удаления: {ex.Message}");
+                MessageBox.Show($"Ошибка удаления: {ex.Message}\n\nДетали: {ex.InnerException?.Message}");
             }
         }
+        private void LogTableStructure()
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    var cmd = new NpgsqlCommand($@"
+                SELECT column_name, data_type 
+                FROM information_schema.columns 
+                WHERE table_name = @tableName", connection);
 
+                    cmd.Parameters.AddWithValue("tableName", _currentTableName.ToLower());
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        var columns = new System.Text.StringBuilder();
+                        columns.AppendLine($"Структура таблицы {_currentTableName}:");
+
+                        while (reader.Read())
+                        {
+                            columns.AppendLine($"{reader.GetString(0)} ({reader.GetString(1)})");
+                        }
+
+                        Console.WriteLine(columns.ToString());
+                        // Для отладки можно вывести в MessageBox:
+                        // MessageBox.Show(columns.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при получении структуры таблицы: {ex.Message}");
+            }
+        }
+        private object GetIdValue()
+        {
+            try
+            {
+                return SelectedRow["id"] ?? SelectedRow[0];
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        private string GetPrimaryKeyColumn(string tableName)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    var cmd = new NpgsqlCommand(@"
+                SELECT a.attname
+                FROM pg_index i
+                JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+                WHERE i.indrelid = @tableName::regclass
+                AND i.indisprimary", connection);
+
+                    cmd.Parameters.AddWithValue("tableName", tableName);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return reader.GetString(0);
+                        }
+                    }
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка определения первичного ключа: {ex.Message}");
+                return null;
+            }
+        }
         private void SaveChanges()
         {
             try
@@ -128,10 +258,5 @@ namespace hrm.ViewModels
             }
         }
 
-        private string GetPrimaryKeyColumn(string tableName)
-        {
-            // Аналогично реализации вашего друга
-            return "id"; // Упрощённо, лучше реализовать как в примере друга
-        }
     }
 }
