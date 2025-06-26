@@ -99,10 +99,10 @@
 
 ## Скриншоты
 
-![Главное окно](https://github.com/user-attachments/assets/12274f5f-5b2c-420e-8910-041a59ccd398)
-![Управление сотрудниками](https://github.com/user-attachments/assets/495ab345-d143-418a-8f25-9e6c084081e7)
-![Управление отделами](https://github.com/user-attachments/assets/8155adcc-44bc-4a14-9890-8b325bc8d386)
-![Управление должностями](https://github.com/user-attachments/assets/6211d3e1-313f-4cc2-85da-4e40b627f123)
+![Главное окно](https://github.com/user-attachments/assets/30d4d92d-410b-44fa-b711-1588074a8097)
+![Таблица с сотрудниками](https://github.com/user-attachments/assets/b9489343-14a6-4ca4-90f7-85c8d4ea3397)
+
+
 
 ## Лицензия
 
