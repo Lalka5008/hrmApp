@@ -1,4 +1,6 @@
-﻿public class SurveyResponse
+﻿using hrm.Models;
+
+public class SurveyResponse
 {
     public int ResponseId { get; set; }
     public int SurveyId { get; set; }

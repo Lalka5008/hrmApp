@@ -1,4 +1,6 @@
-﻿public class EmployeeSkill
+﻿using hrm.Models;
+
+public class EmployeeSkill
 {
     public int EmployeeId { get; set; }
     public Employee Employee { get; set; }

@@ -1,4 +1,6 @@
-﻿public class Payslip
+﻿using hrm.Models;
+
+public class Payslip
 {
     public int PayslipId { get; set; }
     public int EmployeeId { get; set; }

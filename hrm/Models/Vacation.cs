@@ -1,4 +1,6 @@
-﻿public class Vacation
+﻿using hrm.Models;
+
+public class Vacation
 {
     public int VacationId { get; set; }
     public int EmployeeId { get; set; }

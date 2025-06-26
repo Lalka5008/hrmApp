@@ -1,4 +1,6 @@
-﻿public class EmployeeDocument
+﻿using hrm.Models;
+
+public class EmployeeDocument
 {
     public int DocId { get; set; }
     public int EmployeeId { get; set; }

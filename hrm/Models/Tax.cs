@@ -1,4 +1,6 @@
-﻿public class Tax
+﻿using hrm.Models;
+
+public class Tax
 {
     public int TaxId { get; set; }
     public int EmployeeId { get; set; }

@@ -1,4 +1,6 @@
-﻿public class SickLeave
+﻿using hrm.Models;
+
+public class SickLeave
 {
     public int SickLeaveId { get; set; }
     public int EmployeeId { get; set; }

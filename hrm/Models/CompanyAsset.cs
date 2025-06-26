@@ -1,4 +1,6 @@
-﻿public class CompanyAsset
+﻿using hrm.Models;
+
+public class CompanyAsset
 {
     public int AssetId { get; set; }
     public string Name { get; set; }

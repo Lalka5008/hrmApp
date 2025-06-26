@@ -10,69 +10,279 @@
         </Grid.ColumnDefinitions>
 
         <!-- Панель навигации -->
-        <StackPanel Grid.Column="0" Background="#2C3E50" >
-            <TextBlock Text="Меню" Foreground="White" FontWeight="Bold" FontSize="18" Margin="0 0 0 20"/>
-            <Button Content="Сотрудники" 
-                    Command="{Binding LoadTableCommand}" 
-                    CommandParameter="employees"
-                    Margin="0 5" Padding="10"
-                    Background="#34495E" Foreground="White" BorderThickness="0"
-                    Cursor="Hand"
-                    HorizontalContentAlignment="Left"
-                    FontWeight="SemiBold"
-                    >
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="#34495E"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" 
-                                            CornerRadius="5">
-                                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#1ABC9C"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#16A085"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Background="#2C3E50">
+                <TextBlock Text="Меню" Foreground="White" FontWeight="Bold" FontSize="18" Margin="10 10 10 20"/>
 
-            <Button Content="Отделы" 
-                    Command="{Binding LoadTableCommand}" 
-                    CommandParameter="departments"
-                    Margin="0 5" Padding="10"
-                    Background="#34495E" Foreground="White" BorderThickness="0"
-                    Cursor="Hand"
-                    HorizontalContentAlignment="Left"
-                    FontWeight="SemiBold"
-                    Style="{StaticResource {x:Type Button}}"/>
+                <!-- Основные таблицы -->
+                <TextBlock Text="Основные" Foreground="#BDC3C7" Margin="10 0 10 5" FontWeight="Bold"/>
+                <Button Content="Сотрудники" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="employees"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
 
-            <Button Content="Должности" 
-                    Command="{Binding LoadTableCommand}" 
-                    CommandParameter="positions"
-                    Margin="0 5" Padding="10"
-                    Background="#34495E" Foreground="White" BorderThickness="0"
-                    Cursor="Hand"
-                    HorizontalContentAlignment="Left"
-                    FontWeight="SemiBold"
-                    Style="{StaticResource {x:Type Button}}"/>
-        </StackPanel>
+                <Button Content="Отделы" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="departments"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Должности" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="positions"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <!-- Кадровый учет -->
+                <TextBlock Text="Кадровый учет" Foreground="#BDC3C7" Margin="10 15 10 5" FontWeight="Bold"/>
+                <Button Content="График работы" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="workschedules"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Учет времени" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="timetracking"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Отпуска" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="vacations"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Больничные" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="sickleaves"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <!-- Заработная плата -->
+                <TextBlock Text="Зарплата" Foreground="#BDC3C7" Margin="10 15 10 5" FontWeight="Bold"/>
+                <Button Content="Оклады" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="salaries"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Налоги" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="taxes"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Расчетные листы" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="payslips"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="История зарплат" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="salaryhistory"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <!-- Найм и отбор -->
+                <TextBlock Text="Найм и отбор" Foreground="#BDC3C7" Margin="10 15 10 5" FontWeight="Bold"/>
+                <Button Content="Кандидаты" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="candidates"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Вакансии" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="vacancies"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Собеседования" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="interviews"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Офферы" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="joboffers"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <!-- Обучение и развитие -->
+                <TextBlock Text="Обучение и развитие" Foreground="#BDC3C7" Margin="10 15 10 5" FontWeight="Bold"/>
+                <Button Content="Курсы" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="trainingcourses"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Обучение сотрудников" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="employeetraining"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Сертификаты" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="certifications"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Навыки" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="skills"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Навыки сотрудников" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="employeeskills"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <!-- Документы и активы -->
+                <TextBlock Text="Документы и активы" Foreground="#BDC3C7" Margin="10 15 10 5" FontWeight="Bold"/>
+                <Button Content="Документы сотрудников" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="employeedocuments"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Активы компании" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="companyassets"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <!-- Опросы и мероприятия -->
+                <TextBlock Text="Опросы и мероприятия" Foreground="#BDC3C7" Margin="10 15 10 5" FontWeight="Bold"/>
+                <Button Content="Опросы" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="surveys"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Ответы на опросы" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="surveyresponses"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+
+                <Button Content="Мероприятия" 
+                        Command="{Binding LoadTableCommand}" 
+                        CommandParameter="events"
+                        Margin="10 5" Padding="10"
+                        Background="#34495E" Foreground="White" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalContentAlignment="Left"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource {x:Type Button}}"/>
+            </StackPanel>
+        </ScrollViewer>
 
         <!-- Основное содержимое -->
-        <DockPanel Grid.Column="1" Background="White" Margin="15" LastChildFill="True" >
-            <ToolBar DockPanel.Dock="Top" Background="#ECF0F1" Padding="5" >
+        <DockPanel Grid.Column="1" Background="White" Margin="15" LastChildFill="True">
+            <ToolBar DockPanel.Dock="Top" Background="#ECF0F1" Padding="5">
                 <Button Content="Обновить" Command="{Binding RefreshCommand}" Margin="3" Padding="6,3" />
                 <Button Content="Добавить" Command="{Binding AddCommand}" Margin="3" Padding="6,3" />
                 <Button Content="Удалить" Command="{Binding DeleteCommand}" Margin="3" Padding="6,3" />
@@ -94,8 +304,7 @@
                       SelectionMode="Single"
                       SelectionUnit="FullRow"
                       BorderBrush="#D0D0D0"
-                      BorderThickness="1"
-                      >
+                      BorderThickness="1">
                 <DataGrid.Resources>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#34495E"/>

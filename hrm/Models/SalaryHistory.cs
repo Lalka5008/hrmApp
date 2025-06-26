@@ -1,4 +1,6 @@
-﻿public class SalaryHistory
+﻿using hrm.Models;
+
+public class SalaryHistory
 {
     public int HistoryId { get; set; }
     public int EmployeeId { get; set; }
